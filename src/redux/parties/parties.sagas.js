@@ -5,7 +5,7 @@ import {partiesApi} from '../../API/API'
 
 export function* fetchParties() {
     try {
-        const partiesMap = yield partiesApi.getAllParties
+        const partiesMap = yield partiesApi.getAllParties()
         yield put(fetchPartiesSuccess(partiesMap))
     } catch (error) {
         yield put(fetchPartiesFailure(error.message))
