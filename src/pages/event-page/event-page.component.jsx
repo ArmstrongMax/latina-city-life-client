@@ -1,13 +1,42 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useParams} from 'react-router-dom'
-import {useSelector} from "react-redux";
+import {connect} from "react-redux";
+import {fetchEventsStart} from "../../redux/evets/events.actions";
 
 
-const EventPage = () => {
+const EventPage = ({selectedEvent, fetchEvent}) => {
     let params = useParams()
-    const events = useSelector(state => state.parties.parties)
-    const event = events.find(item => item._id === params.eventId)
+    useEffect(()=> {
+        fetchEvent(params.eventId)
+    }, [fetchEvent, params.eventId])
+    const {
+        date,
+        danceStyles,
+        description,
+        fullPrice,
+        imageCover,
+        name,
+        placeAddress,
+        timeEnd,
+        timeStart} = {...selectedEvent}
 
-    return <div>EventPage</div>}
+    return <div>
+        <div>{name}</div>
+        <div>{new Date(date).toDateString()}</div>
+        <div>{fullPrice}</div>
+        <div>{placeAddress}</div>
+        <div>{new Date(timeStart).toTimeString()} - {new Date(timeEnd).toTimeString()}</div>
+        <div>{description}</div>
+        <div>{danceStyles}</div>
+        <img src={imageCover} alt='cover'/>
+    </div>
+}
 
-    export default EventPage
+const mapStateToProps = (state) => ({
+    selectedEvent: state.events.selectedEvent
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchEvent: eventId => dispatch(fetchEventsStart(eventId))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(EventPage)

@@ -5,7 +5,7 @@ import {EventItemStyles} from './event-card.styles'
 const EventItem = ({_id, name, imageCover, fullPrice, date}) => {
     return <EventItemStyles>
         <Link to={`/event/${_id}`}>
-            <img src={imageCover}/>
+            <img src={imageCover} alt='cover'/>
         </Link>
         <div>{name}</div>
         <div>{fullPrice}</div>

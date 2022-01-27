@@ -1,8 +1,10 @@
 import {combineReducers} from "redux"
-import partiesReducer from "./parties/parties.reducer"
+import eventsReducer from "./evets/events.reducer"
+import authReducer from "./auth/auth.reducer";
 
 const rootReducer = combineReducers({
-    parties: partiesReducer
+    events: eventsReducer,
+    auth: authReducer
 })
 
 export default rootReducer

@@ -1,7 +1,0 @@
-const PartiesActionTypes = {
-    FETCH_PARTIES_START: 'FETCH_PARTIES_START',
-    FETCH_PARTIES_SUCCESS: 'FETCH_PARTIES_SUCCESS',
-    FETCH_PARTIES_FAILURE: 'FETCH_PARTIES_FAILURE',
-}
-
-export default PartiesActionTypes

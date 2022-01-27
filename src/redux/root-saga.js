@@ -1,7 +1,13 @@
 import {all, call} from 'redux-saga/effects'
-import {partiesSaga} from "./parties/parties.sagas"
+import {eventsSaga} from './evets/events.sagas'
+import {authSaga} from './auth/auth.sagas'
 
 
 export default function* rootSaga() {
-    yield all([call(partiesSaga)])
+    yield all(
+        [
+            call(eventsSaga),
+            call(authSaga)
+        ]
+    )
 }
