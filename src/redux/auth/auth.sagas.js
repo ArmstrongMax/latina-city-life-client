@@ -6,15 +6,17 @@ import {authEndpoint} from "../../API/API";
 
 export function* signIn({payload: {email, password}}) {
     try {
-        const user = yield authEndpoint.signIn(email,password)
+        const user = yield authEndpoint.signIn(email, password)
         yield put(signInSuccess(user))
     } catch (error) {
-        console.log(error)
         yield put(signInFailure(error))
     }
 }
 
-export function* signUp({firstName, lastName, email, password, passwordConfirm}) {
+export function* signUp({payload:{
+    firstName, lastName, email, password, passwordConfirm
+}
+}) {
     try {
         const user = yield authEndpoint.signUp(firstName, lastName, email, password, passwordConfirm)
         yield put(signUpSuccess(user))
@@ -32,6 +34,15 @@ export function* logout() {
     }
 }
 
+export function* checkIsAuthorized() {
+    try {
+        const user = yield authEndpoint.getMe()
+        if (user) yield put(signInSuccess(user))
+    } catch (error) {
+        yield put(signInFailure(error))
+    }
+}
+
 export function* onSignInStart() {
     yield takeLatest(AuthActionTypes.SIGN_IN_START, signIn)
 }
@@ -44,9 +55,16 @@ export function* onLogOutStart() {
     yield takeLatest(AuthActionTypes.LOGOUT_START, logout)
 }
 
+export function* onCheckIsAuthorized() {
+    yield takeLatest(AuthActionTypes.CHECK_USER_SESSION, checkIsAuthorized)
+
+}
+
 export function* authSaga() {
     yield all([
         call(onSignInStart),
         call(onSignUpStart),
-        call(onLogOutStart)])
+        call(onLogOutStart),
+        call(onCheckIsAuthorized),
+    ])
 }

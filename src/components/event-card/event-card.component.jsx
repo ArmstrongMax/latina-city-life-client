@@ -1,17 +1,53 @@
 import React from 'react'
-import {Link} from "react-router-dom";
-import {EventItemStyles} from './event-card.styles'
+import {
+    DateContainer,
+    EventItemStyles,
+    FavoriteIconContainer,
+    ImageContainer,
+    NameContainer,
+    PriceContainer
+} from './event-card.styles'
+import {addToFavorites, removeFromFavorites} from "../../redux/user/user.actions";
+import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {selectFavorites} from "../../redux/user/user.selectors";
+import {selectCurrentUser} from "../../redux/auth/auth.selectors";
+import FavoriteIcon from "../favorites-icon/favorites-icon.component";
 
-const EventItem = ({_id, name, imageCover, fullPrice, date}) => {
+const EventItem = (
+    {
+        _id,
+        name,
+        imageCover,
+        fullPrice,
+        date,
+        favorites,
+        addToFavorites,
+        removeFromFavorites,
+        currentUser
+    }) => {
     return <EventItemStyles>
-        <Link to={`/event/${_id}`}>
-            <img src={imageCover} alt='cover'/>
-        </Link>
-        <div>{name}</div>
-        <div>{fullPrice}</div>
-        <div>{new Date(date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
-        <button>Пойду!</button>
-        <button>В закладки</button>
+        <ImageContainer to={`/event/${_id}`}><img src={imageCover} alt='cover'/></ImageContainer>
+        <NameContainer>{name}</NameContainer>
+        <PriceContainer>{fullPrice}р.</PriceContainer>
+        <DateContainer>{new Date(date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</DateContainer>
+        <FavoriteIconContainer>
+        {currentUser &&
+        (favorites.includes(_id)
+            ? <FavoriteIcon selected={true} onClick={() => removeFromFavorites(_id)}/>
+            : <FavoriteIcon selected={false} onClick={() => addToFavorites(_id)}/>)
+        }
+        </FavoriteIconContainer>
     </EventItemStyles>
 }
-export default EventItem
+
+const mapStateToProps = createStructuredSelector({
+    favorites: selectFavorites,
+    currentUser: selectCurrentUser
+})
+const mapDispatchToProps = dispatch => ({
+    addToFavorites: event => dispatch(addToFavorites(event)),
+    removeFromFavorites: event => dispatch(removeFromFavorites(event))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventItem)

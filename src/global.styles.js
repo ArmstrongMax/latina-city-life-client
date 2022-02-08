@@ -7,8 +7,8 @@ html {
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
 }
 body {  
         position: absolute;     
@@ -22,7 +22,7 @@ body {
 position: absolute;
 width: 100%;
 height: 100%;
-padding: 40px;
+padding: 30px;
 
 @media screen and (max-width: 800px) {
     padding: 10px;

@@ -1,9 +1,11 @@
 import React from "react";
 import {Navigate} from "react-router-dom";
 import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {selectCurrentUser} from "../../redux/auth/auth.selectors";
 
-const mapStateToProps = state => ({
-    user: state.auth.currentUser
+const mapStateToProps = createStructuredSelector({
+    user: selectCurrentUser
 })
 
 export const withAuthRedirect = WrappedComponent => {

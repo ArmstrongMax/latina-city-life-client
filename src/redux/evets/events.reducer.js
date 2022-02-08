@@ -10,11 +10,13 @@ const INITIAL_STATE = {
 const eventsReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case EventsActionTypes.FETCH_EVENTS_START:
+        case EventsActionTypes.CREATE_EVENT_START:
             return {
                 ...state,
                 isFetching: true
             }
         case EventsActionTypes.FETCH_EVENTS_SUCCESS:
+        case EventsActionTypes.CREATE_EVENT_SUCCESS:
             if (action.payload.length) {
             return {
                 ...state,
@@ -26,6 +28,7 @@ const eventsReducer = (state = INITIAL_STATE, action) => {
             }
 
         case EventsActionTypes.FETCH_EVENTS_FAILURE:
+        case EventsActionTypes.CREATE_EVENT_FAILURE:
             return {
                 ...state,
                 errorMessage: action.payload,

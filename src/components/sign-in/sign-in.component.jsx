@@ -1,6 +1,9 @@
 import React from "react";
 import {signInStart} from "../../redux/auth/auth.actions";
 import {connect} from "react-redux";
+import CustomButton from "../custom-button/custom-button.component";
+import FormInput from "../form-input/form-input.component";
+import {SignInContainer} from "./sign-in.styles";
 
 class SignIn extends React.Component {
     constructor() {
@@ -23,11 +26,10 @@ class SignIn extends React.Component {
     };
     render() {
         const { email, password} = this.state;
-        return (
-            <div>
-                <span>Войдите в систему</span>
+        return <SignInContainer>
+                <h3>Войдите в систему</h3>
                 <form className='sign-up-form' onSubmit={this.handleSubmit}>
-                    <input
+                    <FormInput
                         type='email'
                         name='email'
                         value={email}
@@ -35,7 +37,7 @@ class SignIn extends React.Component {
                         label='Почтовый адрес'
                         required
                     />
-                    <input
+                    <FormInput
                         type='password'
                         name='password'
                         value={password}
@@ -43,10 +45,10 @@ class SignIn extends React.Component {
                         label='Пароль'
                         required
                     />
-                    <button type='submit'>Войти</button>
+                    <CustomButton type='submit'>Войти</CustomButton>
                 </form>
-            </div>
-        );
+            </SignInContainer>
+        ;
     }
 }
 

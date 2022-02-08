@@ -1,6 +1,6 @@
 import AuthActionTypes from "./auth.types"
 
-export const signInStart = (userCredentials) => ({
+export const signInStart = userCredentials => ({
     type: AuthActionTypes.SIGN_IN_START,
     payload:userCredentials
 })
@@ -12,8 +12,9 @@ export const signInFailure = errorMessage => ({
     type: AuthActionTypes.SIGN_IN_FAILURE,
     payload: errorMessage
 })
-export const signUpStart = () => ({
+export const signUpStart = userCredentials => ({
     type: AuthActionTypes.SIGN_UP_START,
+    payload:userCredentials
 })
 export const signUpSuccess = user => ({
     type: AuthActionTypes.SIGN_UP_SUCCESS,
@@ -32,4 +33,8 @@ export const logOutSuccess = () => ({
 export const logOutFailure = errorMessage => ({
     type: AuthActionTypes.LOGOUT_FAILURE,
     payload: errorMessage
+})
+
+export const checkIsAuthorized = () => ({
+    type: AuthActionTypes.CHECK_USER_SESSION
 })

@@ -2,8 +2,11 @@ import React from 'react'
 import {connect} from "react-redux";
 import {fetchEventsStart} from "../../redux/evets/events.actions";
 import EventItem from "../../components/event-card/event-card.component";
-import {HomePageStyles} from "./home-page.styles"
-
+import {EventsContainer, HomePageStyles, TitleContainer} from "./home-page.styles"
+import {Link} from "react-router-dom";
+import {createStructuredSelector} from "reselect";
+import {selectEventsForHomePage} from "../../redux/evets/events.selectors";
+import CustomButton from "../../components/custom-button/custom-button.component";
 
 
 class Homepage extends React.Component {
@@ -13,19 +16,26 @@ class Homepage extends React.Component {
 
     render() {
         return <HomePageStyles>
-            <h3>Предстоящие события</h3>
-            {this.props.events?.map(({id, ...otherProps}) => {
-            return <EventItem key={id} {...otherProps}/>
-        })}</HomePageStyles>
+            <TitleContainer>
+                <h3>Cобытия</h3>
+                <Link to='/add-event'>
+                    <CustomButton>Добавить событие</CustomButton>
+                </Link>
+            </TitleContainer>
+            <EventsContainer>
+                {this.props.events.map(({id, ...otherProps}) => {
+                    return <EventItem key={id} {...otherProps}/>
+                })}
+            </EventsContainer>
+        </HomePageStyles>
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        events: state.events.events
-    }
-}
+const mapStateToProps = createStructuredSelector({
+    events: selectEventsForHomePage
+})
 const mapDispatchToProps = dispatch => ({
     fetchEventsStart: () => dispatch(fetchEventsStart())
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage)

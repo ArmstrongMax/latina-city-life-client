@@ -2,11 +2,21 @@ import React, {useEffect} from "react";
 import {useParams} from 'react-router-dom'
 import {connect} from "react-redux";
 import {fetchEventsStart} from "../../redux/evets/events.actions";
+import {createStructuredSelector} from "reselect";
+import {selectSelectedEvent} from "../../redux/evets/events.selectors";
+import ParticipationList from "../../components/participation-list/participation-list.component";
+import {
+    EventDescriptionContainer,
+    EventImageContainer,
+    EventPageContainer,
+    EventParticipantsContainer
+} from "./event-page.styles";
+import LabelContent from "../../components/label-span/label-span.component";
 
 
 const EventPage = ({selectedEvent, fetchEvent}) => {
     let params = useParams()
-    useEffect(()=> {
+    useEffect(() => {
         fetchEvent(params.eventId)
     }, [fetchEvent, params.eventId])
     const {
@@ -18,25 +28,35 @@ const EventPage = ({selectedEvent, fetchEvent}) => {
         name,
         placeAddress,
         timeEnd,
-        timeStart} = {...selectedEvent}
+        timeStart,
+    } = selectedEvent
 
-    return <div>
-        <div>{name}</div>
-        <div>{new Date(date).toDateString()}</div>
-        <div>{fullPrice}</div>
-        <div>{placeAddress}</div>
-        <div>{new Date(timeStart).toTimeString()} - {new Date(timeEnd).toTimeString()}</div>
-        <div>{description}</div>
-        <div>{danceStyles}</div>
-        <img src={imageCover} alt='cover'/>
-    </div>
+    return <EventPageContainer>
+        <EventImageContainer  src={imageCover} alt='event cover image'/>
+        <EventDescriptionContainer>
+            <LabelContent label={'Название'} content={name}/>
+            <LabelContent label={'Дата'} content={new Date(date).toLocaleString("ru", {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}/>
+            <LabelContent label={'Стоимость'} content={`${fullPrice} руб.`}/>
+            <LabelContent label={'Адрес'} content={placeAddress}/>
+            <LabelContent label={'Время'} content={`${timeStart} - ${timeEnd}`}/>
+            <LabelContent label={'Описание'} content={description}/>
+            <LabelContent label={'Музыкальный формат'} content={danceStyles}/>
+        </EventDescriptionContainer>
+        <EventParticipantsContainer>
+            <ParticipationList owner={'party'} id={params.eventId}/>
+        </EventParticipantsContainer>
+    </EventPageContainer>
 }
 
-const mapStateToProps = (state) => ({
-    selectedEvent: state.events.selectedEvent
+const mapStateToProps = createStructuredSelector({
+    selectedEvent: selectSelectedEvent
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchEvent: eventId => dispatch(fetchEventsStart(eventId))
+    fetchEvent: eventId => dispatch(fetchEventsStart(eventId)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(EventPage)
