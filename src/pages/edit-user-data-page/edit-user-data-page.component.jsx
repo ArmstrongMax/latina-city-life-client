@@ -14,6 +14,8 @@ import {
     RadioButtonsContainer
 } from "./edit-user-data-page.styles";
 import {Link} from "react-router-dom";
+import {editUserDataSchema} from "../../validation/validationShemas";
+import ValidationError from "../../components/validation-error/validation-error.component";
 
 class EditUserDataPage extends React.Component {
     constructor() {
@@ -26,17 +28,33 @@ class EditUserDataPage extends React.Component {
             danceStyles: '',
             school: '',
             communityStatus: '',
-            photo: ''
+            photo: '',
+            validationError: ''
         }
         this.fileInput = React.createRef();
     }
+
     handleSubmitData = async event => {
         event.preventDefault()
         const {editUserDataStart} = this.props
         const {firstName, lastName, email, dancingSince, danceStyles, school, communityStatus} = this.state
-        const photo = this.fileInput.current.files[0]
 
-        editUserDataStart({firstName, lastName, email, dancingSince, danceStyles, school, communityStatus, photo});
+        try {
+            await editUserDataSchema.validate({
+                firstName,
+                lastName,
+                email,
+                dancingSince,
+                danceStyles,
+                school,
+                communityStatus
+            })
+            editUserDataStart({firstName, lastName, email, dancingSince, danceStyles, school, communityStatus});
+        } catch (error) {
+            this.setState({validationError: error.message})
+        }
+
+
     }
     handleSubmitPhoto = async event => {
         event.preventDefault()
@@ -50,7 +68,7 @@ class EditUserDataPage extends React.Component {
     }
 
     render() {
-        const {firstName, lastName, email, dancingSince, danceStyles, school} = this.state
+        const {firstName, lastName, email, dancingSince, danceStyles, school, validationError} = this.state
         return <EditUserDataPageContainer>
             <FormsContainer>
                 <form onSubmit={this.handleSubmitPhoto}>
@@ -110,42 +128,41 @@ class EditUserDataPage extends React.Component {
 
                     <RadioButtonsContainer>
                         <label>Вы ...</label>
-                        <div>
-                            <input
-                                id='communityStatus1'
-                                type='radio'
-                                name='communityStatus'
-                                value='танцор'
-                                onChange={this.handleChange}
-                            />
-                            <label htmlFor='communityStatus1'>танцор</label>
-                            <input
-                                id='communityStatus2'
-                                type='radio'
-                                name='communityStatus'
-                                value='преподаватель'
-                                onChange={this.handleChange}
-                            />
-                            <label htmlFor='communityStatus2'>преподаватель</label>
+                        <input
+                            id='communityStatus1'
+                            type='radio'
+                            name='communityStatus'
+                            value='танцор'
+                            onChange={this.handleChange}
+                        />
+                        <label htmlFor='communityStatus1'>танцор</label>
+                        <input
+                            id='communityStatus2'
+                            type='radio'
+                            name='communityStatus'
+                            value='преподаватель'
+                            onChange={this.handleChange}
+                        />
+                        <label htmlFor='communityStatus2'>преподаватель</label>
 
-                            <input
-                                id='communityStatus3'
-                                type='radio'
-                                name='communityStatus'
-                                value='организатор'
-                                onChange={this.handleChange}
-                            />
-                            <label htmlFor='communityStatus3'>организатор</label>
-                            <input
-                                id='communityStatus4'
-                                type='radio'
-                                name='communityStatus'
-                                value='наблюдатель'
-                                onChange={this.handleChange}
-                            />
-                            <label htmlFor='communityStatus4'>просто интересующийся</label>
-                        </div>
+                        <input
+                            id='communityStatus3'
+                            type='radio'
+                            name='communityStatus'
+                            value='организатор'
+                            onChange={this.handleChange}
+                        />
+                        <label htmlFor='communityStatus3'>организатор</label>
+                        <input
+                            id='communityStatus4'
+                            type='radio'
+                            name='communityStatus'
+                            value='наблюдатель'
+                            onChange={this.handleChange}
+                        />
+                        <label htmlFor='communityStatus4'>просто интересующийся</label>
                     </RadioButtonsContainer>
+                    {validationError && <ValidationError message={validationError}/>}
                     <CustomButton type='submit'>Сохранить</CustomButton>
                 </form>
             </FormsContainer>

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
 import {
     GroupContainer,
     FormInputContainer,
     FormInputLabel
-} from './form-input.styles';
+} from './form-input.styles'
 
 const FormInput = ({ handleChange, label, ...props }) => (
     <GroupContainer>
@@ -15,6 +15,6 @@ const FormInput = ({ handleChange, label, ...props }) => (
             </FormInputLabel>
         ) : null}
     </GroupContainer>
-);
+)
 
-export default FormInput;
+export default FormInput

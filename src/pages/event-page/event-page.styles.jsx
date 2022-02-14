@@ -7,6 +7,7 @@ display: flex;
 export const EventImageContainer = styled.img`
 flex: 0 0 auto;
 width: 400px;
+height: fit-content;
 margin: 20px;
 border-radius: 5px;
 `

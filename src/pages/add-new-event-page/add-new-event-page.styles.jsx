@@ -9,8 +9,21 @@ export const FormContainer = styled.div`
 width: 1000px;
 `
 
-export const ButtonsContainer = styled.div`
+export const CreateOrCancelButtonsContainer = styled.div`
 display: flex;
 flex-direction: column;
 justify-content: center;
 `
+
+export const AddImageContainer = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: center;
+`
+
+export const AddImageAndCreateButtonsContainer = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+`
+

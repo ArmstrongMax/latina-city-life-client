@@ -2,6 +2,7 @@ import AuthActionTypes from "./auth.types"
 
 const INITIAL_STATE = {
     currentUser: null,
+    isSomeoneAuthorized: false,
     isFetching: false,
     errorMessage: null
 }
@@ -14,9 +15,15 @@ const authReducer = (state = INITIAL_STATE, action) => {
             return {...state, isFetching: true}
         case AuthActionTypes.SIGN_IN_SUCCESS:
         case AuthActionTypes.SIGN_UP_SUCCESS:
-            return {...state, isFetching: false, currentUser: action.payload}
+            return {
+                ...state,
+                isFetching: false,
+                currentUser: action.payload,
+                errorMessage: null,
+                isSomeoneAuthorized: true
+            }
         case AuthActionTypes.LOGOUT_SUCCESS:
-            return {...state, isFetching: false, currentUser: null}
+            return {...state, isFetching: false, currentUser: null, errorMessage: null, isSomeoneAuthorized: false}
         case AuthActionTypes.SIGN_IN_FAILURE:
         case AuthActionTypes.SIGN_UP_FAILURE:
         case AuthActionTypes.LOGOUT_FAILURE:

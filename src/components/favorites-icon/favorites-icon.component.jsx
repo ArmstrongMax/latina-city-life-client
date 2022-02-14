@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import selectedFavorite from '../../assets/selectedFavorite.png'
 import favorite from '../../assets/favorite.png'
 import {FavoriteIconStyles} from "./favorites-icon.styles";

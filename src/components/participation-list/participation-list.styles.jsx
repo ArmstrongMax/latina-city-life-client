@@ -15,6 +15,8 @@ border-radius: 5px;
 font-size: 1.3em;
 `
 export const ParticipationItemsContainer = styled.div`
+display: flex;
+flex-direction: column;
 margin: 5px;
 overflow: auto;
 `

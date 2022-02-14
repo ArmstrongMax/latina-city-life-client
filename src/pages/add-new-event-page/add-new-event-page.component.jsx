@@ -4,11 +4,16 @@ import {createEventStart} from "../../redux/evets/events.actions";
 import FormInput from "../../components/form-input/form-input.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
 import {
+    AddImageAndCreateButtonsContainer,
+    AddImageContainer,
     AddNewEventPageFormContainer,
-    ButtonsContainer,
+    ButtonsContainer, CreateOrCancelButtonsContainer,
     FormContainer
 } from "./add-new-event-page.styles";
-import {Link, Navigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import {addNewEventSchema} from "../../validation/validationShemas";
+import ValidationError from "../../components/validation-error/validation-error.component";
+import {FileInput} from "../edit-user-data-page/edit-user-data-page.styles";
 
 
 class AddNewEventPage extends React.Component {
@@ -23,15 +28,21 @@ class AddNewEventPage extends React.Component {
             timeStart: '',
             timeEnd: '',
             danceStyles: '',
+            validationError: ''
         }
         this.fileInput = React.createRef();
     }
 
-    handleSubmit = event => {
-
+    handleSubmit = async event => {
         event.preventDefault()
         const {createEventStart} = this.props
-        createEventStart({...this.state});
+        const imageCover = this.fileInput.current.files[0]
+        try {
+            await addNewEventSchema.validate({...this.state})
+            createEventStart({...this.state, imageCover})
+        } catch (error) {
+            this.setState({validationError: error.message})
+        }
     };
     handleChange = event => {
         const {name, value} = event.target;
@@ -39,16 +50,15 @@ class AddNewEventPage extends React.Component {
     };
 
     render() {
-        const {name, date, fullPrice, placeAddress, description, timeStart, timeEnd, danceStyles} = this.state;
+        const {name, date, fullPrice, placeAddress, description, timeStart, timeEnd, danceStyles, validationError} = this.state;
         return <AddNewEventPageFormContainer className='add-new-event-form' onSubmit={this.handleSubmit}>
-                <FormContainer>
+            <FormContainer>
                 <FormInput
                     type='text'
                     name='name'
                     value={name}
                     onChange={this.handleChange}
                     label='Название'
-                    required
                 />
                 <FormInput
                     type='date'
@@ -56,7 +66,6 @@ class AddNewEventPage extends React.Component {
                     value={date}
                     label='Дата'
                     onChange={this.handleChange}
-                    required
                 />
                 <FormInput
                     type='text'
@@ -64,7 +73,6 @@ class AddNewEventPage extends React.Component {
                     value={fullPrice}
                     label='Стоимость'
                     onChange={this.handleChange}
-                    required
                 />
                 <FormInput
                     type='text'
@@ -72,7 +80,6 @@ class AddNewEventPage extends React.Component {
                     value={placeAddress}
                     label='Место'
                     onChange={this.handleChange}
-                    required
                 />
                 <FormInput
                     type='text'
@@ -87,7 +94,6 @@ class AddNewEventPage extends React.Component {
                     value={timeStart}
                     label='Время начала'
                     onChange={this.handleChange}
-                    required
                 />
                 <FormInput
                     type='time'
@@ -95,7 +101,6 @@ class AddNewEventPage extends React.Component {
                     value={timeEnd}
                     label='Время окончания'
                     onChange={this.handleChange}
-                    required
                 />
                 <FormInput
                     type='text'
@@ -104,12 +109,25 @@ class AddNewEventPage extends React.Component {
                     label='Музыкальный формат'
                     onChange={this.handleChange}
                 />
-                </FormContainer>
-                <ButtonsContainer>
-                    <CustomButton type='submit'>Создать</CustomButton>
-                    <CustomButton type='button'><Link to='/'>Отменить</Link></CustomButton>
-                </ButtonsContainer>
-            </AddNewEventPageFormContainer>
+            </FormContainer>
+            <AddImageAndCreateButtonsContainer>
+            <AddImageContainer>
+                <h3>Добавьте изображение</h3>
+                <FileInput
+                    type='file'
+                    name='imageCover'
+                    id='input__file'
+                    ref={this.fileInput}
+                />
+                <CustomButton type={'button'}><label htmlFor="input__file">Выберите файл</label></CustomButton>
+            </AddImageContainer>
+            <CreateOrCancelButtonsContainer>
+                <CustomButton type='submit'>Создать</CustomButton>
+                <CustomButton type='button'><Link to='/'>Отменить</Link></CustomButton>
+                {validationError && <ValidationError message={validationError}/>}
+            </CreateOrCancelButtonsContainer>
+            </AddImageAndCreateButtonsContainer>
+        </AddNewEventPageFormContainer>
     }
 }
 

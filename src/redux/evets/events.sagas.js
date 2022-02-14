@@ -12,8 +12,8 @@ export function* fetchEvents({payload: eventId}) {
     }
 }
 
-export function* createEvent ({payload: eventData}) {
-        const newEvent = yield partiesEndpoint.createEvent({...eventData})
+export function* createEvent({payload: eventData}) {
+    const newEvent = yield partiesEndpoint.createEvent(eventData)
     yield put(createEventSuccess(newEvent))
 }
 
@@ -23,8 +23,9 @@ export function* onFetchEventsStart() {
         fetchEvents
     )
 }
+
 export function* onCreateEventStart() {
-yield takeLatest(EventsActionTypes.CREATE_EVENT_START, createEvent)
+    yield takeLatest(EventsActionTypes.CREATE_EVENT_START, createEvent)
 }
 
 export function* eventsSaga() {

@@ -4,17 +4,9 @@ import Footer from "./components/footer/footer.component";
 import ContentContainer from "./components/content-container/content-container.component";
 import {GlobalStyle} from './global.styles'
 import {AppStyles, AppHeaderStyles, AppContentStyles, AppFooterStyles} from './App.styles'
-import {checkIsAuthorized} from "./redux/auth/auth.actions";
-import {connect} from "react-redux";
 
-class App extends React.Component {
-
-    componentDidMount() {
-        this.props.checkUserSession()
-    }
-
-    render () {
-        return <>
+const App = () => {
+return <>
             <GlobalStyle/>
             <AppStyles>
                 <AppHeaderStyles>
@@ -28,11 +20,5 @@ class App extends React.Component {
                 </AppFooterStyles>
             </AppStyles>
         </>
-    }
 }
-
-const mapDispatchToProps = dispatch => ({
-    checkUserSession: () => dispatch(checkIsAuthorized())
-})
-
-export default connect(null, mapDispatchToProps)(App)
+export default App

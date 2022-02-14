@@ -3,6 +3,8 @@ import {signUpStart} from "../../redux/auth/auth.actions";
 import {connect} from "react-redux";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
+import {signUpSchema} from '../../validation/validationShemas'
+import ValidationError from "../validation-error/validation-error.component";
 
 class SignUp extends React.Component {
     constructor() {
@@ -12,7 +14,8 @@ class SignUp extends React.Component {
             lastName: '',
             email: '',
             password: '',
-            passwordConfirm: ''
+            passwordConfirm: '',
+            validationError: ''
         }
     }
 
@@ -22,10 +25,15 @@ class SignUp extends React.Component {
         const {firstName, lastName, email, password, passwordConfirm} = this.state;
 
         if (password !== passwordConfirm) {
-            alert("passwords don't match");
+            this.setState({validationError: 'Пароли не совпадают'})
             return;
         }
-        signUpStart({firstName, lastName, email, password, passwordConfirm});
+        try {
+            await signUpSchema.validate({firstName, email, password, passwordConfirm})
+            signUpStart({firstName, lastName, email, password, passwordConfirm});
+        } catch (error) {
+            this.setState({validationError: error.message})
+        }
     };
     handleChange = event => {
         const {name, value} = event.target;
@@ -33,7 +41,7 @@ class SignUp extends React.Component {
     };
 
     render() {
-        const {firstName, lastName, email, password, passwordConfirm} = this.state;
+        const {firstName, lastName, email, password, passwordConfirm, validationError} = this.state;
         return (
             <div>
                 <h3>Регистрация нового пользователя</h3>
@@ -44,7 +52,6 @@ class SignUp extends React.Component {
                         value={firstName}
                         onChange={this.handleChange}
                         label='Имя'
-                        required
                     />
                     <FormInput
                         type='text'
@@ -52,15 +59,12 @@ class SignUp extends React.Component {
                         value={lastName}
                         onChange={this.handleChange}
                         label='Фамилия'
-                        required
                     />
                     <FormInput
-                        type='email'
                         name='email'
                         value={email}
                         onChange={this.handleChange}
                         label='Почтовый адрес'
-                        required
                     />
                     <FormInput
                         type='password'
@@ -68,7 +72,6 @@ class SignUp extends React.Component {
                         value={password}
                         onChange={this.handleChange}
                         label='Пароль'
-                        required
                     />
                     <FormInput
                         type='password'
@@ -76,8 +79,8 @@ class SignUp extends React.Component {
                         value={passwordConfirm}
                         onChange={this.handleChange}
                         label='Подтверждение пароля'
-                        required
                     />
+                    {validationError && <ValidationError message={validationError}/>}
                     <CustomButton type='submit'>Зарегестрироваться</CustomButton>
                 </form>
             </div>

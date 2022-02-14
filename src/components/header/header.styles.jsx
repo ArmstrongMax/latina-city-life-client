@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import {Link} from "react-router-dom";
-import React from "react";
 
 export const HeaderStyles = styled.div`
   height: 70px;
@@ -13,9 +12,13 @@ export const HeaderStyles = styled.div`
     height: 60px;
   }
 `
-export const LogoContainer = styled(Link)`
+
+export const LogoContainer = styled.div`
 margin: 5px;
 img { height: 100%}
+`
+
+export const LogoImgContainer = styled(Link)`
 `
 export const LogoTextContainer = styled(Link)`
  @media screen and (max-width: 800px) {
@@ -35,5 +38,5 @@ export const UserContainer = styled.div`
 `
 export const OptionLink = styled(Link)`
 padding: 10px 15px;
-  cursor: pointer;
+cursor: pointer;
 `

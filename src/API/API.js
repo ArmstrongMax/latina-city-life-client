@@ -1,26 +1,38 @@
 import * as axios from "axios"
 
-
 const instance = axios.create({
     withCredentials: true,
     baseURL: 'http://127.0.0.1:8000/api/v1'
 })
 
-
 export const partiesEndpoint = {
     async getEvents(eventId) {
-        const response = await instance.get(`/parties${eventId ? '/' + eventId : ''}`).catch((error) => {
+        const response = await instance.get(`/parties${eventId ? '/' + eventId : '?sort=-date'}`).catch((error) => {
             if (error.response) {
                 return error.response
             }
         })
         return response.data.data.data
     },
-    async createEvent({...eventData}) {
-        const response = await instance.post('/parties', {...eventData}).catch((error) => {
-            if (error) return error.response
-        })
-        return response.data.data.data
+    async createEvent(eventData) {
+        const data = {...eventData}
+        let imageCover
+        if (data['imageCover']) {
+            imageCover = data['imageCover']
+            delete data['imageCover']
+        }
+        const response = await instance.post('/parties', data)
+
+        if (imageCover) {
+            const formData = new FormData()
+            formData.append('imageCover', imageCover)
+            const updateResponse = await instance.patch(`/parties/${response.data.data.data._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            return updateResponse.data.data.data
+        } else return response.data.data.data
     }
 }
 
@@ -39,11 +51,15 @@ export const authEndpoint = {
     },
 
     async signIn(email, password) {
-        const response = await instance.post(`/users/login`, {
-            email,
-            password
-        }).catch(error => error.response.data.message)
-        if (response) return response.data.data.user
+        try {
+            const response = await instance.post(`/users/login`, {
+                email,
+                password
+            })
+            return response.data
+        } catch (error) {
+            return error.response.data
+        }
     },
 
     async logout() {
@@ -80,7 +96,6 @@ export const participationEndpoint = {
         })
     }
 }
-
 
 export const userEndpoint = {
     async editUserData({...userData}) {

@@ -12,6 +12,7 @@ import {
     ParticipationListContainer,
     ParticipationSpanContainer
 } from "./participation-list.styles";
+import CustomButton from "../custom-button/custom-button.component";
 
 class ParticipationList extends React.Component {
     componentDidMount() {
@@ -29,12 +30,12 @@ class ParticipationList extends React.Component {
             return <ParticipationListContainer>
                 <ParticipationButtonContainer>
                     {currentUserId && (participationId
-                        ? <button onClick={() => {
+                        ? <CustomButton onClick={() => {
                             removeParticipation(participationId, owner, id)
-                        }}>Не пойду!</button>
-                        : <button onClick={() => {
+                        }}>Не пойду!</CustomButton>
+                        : <CustomButton onClick={() => {
                             addParticipation(id, currentUserId, owner)
-                        }}>Я иду!</button>)}
+                        }}>Я иду!</CustomButton>)}
                 </ParticipationButtonContainer>
                 <ParticipationSpanContainer>Участники</ParticipationSpanContainer>
                 <ParticipationItemsContainer>
@@ -55,7 +56,7 @@ class ParticipationList extends React.Component {
                         key={item.party._id}
                         id={item.party._id}
                         name={item.party.name}
-                        image={item.party.imageCover}/>
+                        image={item.party.imageCoverSmall}/>
                     )
                     : <span>У вас пока нет мероприятий</span>
                 }

@@ -5,9 +5,9 @@ export const CustomButtonContainer = styled.button`
   justify-content: center;
   align-items: center;
   min-width: 70px;
-  height: 50px;
+  height: 40px;
+  max-height: 60px;
   letter-spacing: 0.5px;
-  line-height: 25px;
   padding: 0 15px 0 15px;
   font-size: 15px;
   text-transform: uppercase;

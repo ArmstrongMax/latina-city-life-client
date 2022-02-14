@@ -34,7 +34,3 @@ export const logOutFailure = errorMessage => ({
     type: AuthActionTypes.LOGOUT_FAILURE,
     payload: errorMessage
 })
-
-export const checkIsAuthorized = () => ({
-    type: AuthActionTypes.CHECK_USER_SESSION
-})
