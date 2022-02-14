@@ -8,8 +8,6 @@ import {store, persistor} from "./redux/store";
 import {Provider} from "react-redux";
 import { PersistGate } from 'redux-persist/integration/react';
 
-console.log(process.env.NODE_ENV)
-
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
