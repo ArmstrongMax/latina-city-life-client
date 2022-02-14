@@ -3,7 +3,7 @@ import * as axios from "axios"
 const instance = axios.create({
     withCredentials: true,
     baseURL: process.env.NODE_ENV === 'production'
-        ? `${process.env.HOST}/api/v1`
+        ? `${process.env.SERVER_ADDRESS}/api/v1`
         :'http://127.0.0.1:8000/api/v1'
 })
 
